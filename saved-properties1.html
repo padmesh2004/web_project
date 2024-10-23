@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="realEstateApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Properties</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #effaf6;
+        }
+
+        header {
+            background-color: rgb(29, 110, 111);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        .redirect-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #ff9800;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .redirect-btn:hover {
+            background-color: #e68900;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: rgb(29, 110, 111);
+        }
+
+        .featured-properties-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px; /* Space between property cards */
+        }
+
+        .featured-property {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px; /* Fixed width for property cards */
+            transition: transform 0.2s; /* Smooth hover effect */
+        }
+
+        .featured-property:hover {
+            transform: scale(1.05); /* Scale effect on hover */
+        }
+
+        .featured-property img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .featured-property h3 {
+            margin: 10px;
+            font-size: 1.2em;
+            color: rgb(29, 110, 111);
+        }
+
+        .featured-property p {
+            margin: 5px 10px;
+            color: #555;
+        }
+
+        /* Add media queries for responsiveness */
+        @media (max-width: 768px) {
+            .featured-property {
+                width: 90%; /* Make cards full width on smaller screens */
+            }
+        }
+    </style>
+</head>
+<body ng-controller="SavedPropertiesController">
+    <header>
+        <h1>Your Saved Properties</h1>
+        <a href="home1.html" class="redirect-btn">Back to Home</a>
+    </header>
+
+    <div class="container">
+        <h2>Saved Properties List</h2>
+        <div class="featured-properties-container">
+            <div class="featured-property" ng-repeat="property in savedProperties" ng-click="viewMore(property)">
+                <img ng-src="{{property.image}}" alt="Property Image">
+                <h3>{{property.name}}</h3>
+                <p>{{property.location}}</p>
+                <p>{{property.price | currency}}</p>
+                <p>{{property.bhk}} BHK</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module('realEstateApp', []);
+        
+        // Controller for Saved Properties
+        app.controller('SavedPropertiesController', function($scope) {
+            // Retrieve saved properties from local storage
+            $scope.savedProperties = JSON.parse(localStorage.getItem('savedProperties')) || [];
+            
+            if ($scope.savedProperties.length === 0) {
+                alert("You have no saved properties.");
+            }
+            $scope.viewMore = function(property) {
+                window.location.href = 'property-details.html?id=' + property.id;
+            };
+        });
+    </script>
+</body>
+</html>

@@ -3,8 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const bcrypt = require('bcrypt'); // Add bcrypt for password hashing
-
+const bcrypt = require('bcrypt');  // For password hashing and comparison
 
 // Create the Express app
 const app = express();
@@ -14,7 +13,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // MongoDB connection URI (replace with your provided connection string)
-const mongoURI = 'mongodb+srv://padmesh:%40Bpadmesh04@cluster0.5s5pq.mongodb.net/';
+const mongoURI = 'mongodb+srv://padmesh:%40Bpadmesh04@cluster0.5s5pq.mongodb.net/padmesh?retryWrites=true&w=majority';
 
 // Connect to MongoDB
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -41,10 +40,10 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ message: 'Already Registered' });
     }
 
-    // Hash the password before saving the user
+    // Hash the password before saving it
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user with the hashed password
+    // Create a new user
     const newUser = new User({ username, email, password: hashedPassword });
     await newUser.save();
 
@@ -54,31 +53,29 @@ app.post('/register', async (req, res) => {
   }
 });
 
-
-
 // POST request for user login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Check if the email exists
+    // Check if the user exists
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password' });
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Compare the input password with the stored hashed password
+    // Compare the plain text password with the hashed password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid email or password' });
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
 
+    // Successful login
     res.status(200).json({ message: 'Login successful!' });
   } catch (error) {
-    res.status(500).json({ message: 'Error logging in' });
+    res.status(500).json({ message: 'Error logging in', error: error.message });
   }
 });
-
 
 // Start the server
 const PORT = 3000;
