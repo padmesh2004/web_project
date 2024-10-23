@@ -92,7 +92,8 @@
         <form name="registrationForm" ng-submit="submitForm()" novalidate>
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" name="username" ng-model="user.username" required minlength="3" ng-class="{'ng-invalid': registrationForm.username.$touched && registrationForm.username.$invalid}">
+                <input type="text" name="username" ng-model="user.username" required minlength="3"
+                    ng-class="{'ng-invalid': registrationForm.username.$touched && registrationForm.username.$invalid}">
                 <span class="error" ng-show="registrationForm.username.$touched && registrationForm.username.$invalid">
                     <span ng-show="registrationForm.username.$error.required">Username is required.</span>
                     <span ng-show="registrationForm.username.$error.minlength">Username must be at least 3 characters long.</span>
@@ -101,7 +102,8 @@
 
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" name="email" ng-model="user.email" required ng-class="{'ng-invalid': registrationForm.email.$touched && registrationForm.email.$invalid}">
+                <input type="email" name="email" ng-model="user.email" required
+                    ng-class="{'ng-invalid': registrationForm.email.$touched && registrationForm.email.$invalid}">
                 <span class="error" ng-show="registrationForm.email.$touched && registrationForm.email.$invalid">
                     <span ng-show="registrationForm.email.$error.required">Email is required.</span>
                     <span ng-show="registrationForm.email.$error.email">Please enter a valid email address.</span>
@@ -110,7 +112,8 @@
 
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" name="password" ng-model="user.password" required minlength="6" ng-class="{'ng-invalid': registrationForm.password.$touched && registrationForm.password.$invalid}">
+                <input type="password" name="password" ng-model="user.password" required minlength="6"
+                    ng-class="{'ng-invalid': registrationForm.password.$touched && registrationForm.password.$invalid}">
                 <span class="error" ng-show="registrationForm.password.$touched && registrationForm.password.$invalid">
                     <span ng-show="registrationForm.password.$error.required">Password is required.</span>
                     <span ng-show="registrationForm.password.$error.minlength">Password must be at least 6 characters long.</span>
@@ -119,8 +122,10 @@
 
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password:</label>
-                <input type="password" name="confirmPassword" ng-model="user.confirmPassword" required ng-class="{'ng-invalid': registrationForm.confirmPassword.$touched && registrationForm.confirmPassword.$invalid}">
-                <span class="error" ng-show="registrationForm.confirmPassword.$touched && registrationForm.confirmPassword.$invalid || (user.password !== user.confirmPassword)">
+                <input type="password" name="confirmPassword" ng-model="user.confirmPassword" required
+                    ng-class="{'ng-invalid': registrationForm.confirmPassword.$touched && registrationForm.confirmPassword.$invalid}">
+                <span class="error"
+                    ng-show="registrationForm.confirmPassword.$touched && registrationForm.confirmPassword.$invalid || (user.password !== user.confirmPassword)">
                     <span ng-show="registrationForm.confirmPassword.$error.required">Confirm password is required.</span>
                     <span ng-show="user.password !== user.confirmPassword && registrationForm.confirmPassword.$touched">Passwords do not match.</span>
                 </span>
@@ -134,38 +139,37 @@
     <script>
         var app = angular.module('registrationApp', []);
 
-        app.controller('RegistrationController', function($scope, $http) {
+        app.controller('RegistrationController', function ($scope, $http) {
             $scope.user = {};
 
-            // Function to handle form submission
-            $scope.submitForm = function() {
+            $scope.submitForm = function () {
                 if ($scope.user.password !== $scope.user.confirmPassword) {
                     alert("Passwords do not match!");
                     return;
                 }
 
                 if ($scope.registrationForm.$valid) {
-                    // Send the data to the backend server
                     $http.post('http://localhost:3000/register', {
                         username: $scope.user.username,
                         email: $scope.user.email,
                         password: $scope.user.password
                     })
-                    .then(function(response) {
+                    .then(function (response) {
                         alert("Registration successful!");
-                        console.log(response.data);
-                        window.location.href = 'login.html'; //redirects to login.html
+                        window.location.href = 'login.html'; // Redirect to login page
                     })
-                    .catch(function(error) {
-                    // Handle the "Already Registered" message or other errors
-                    if (error.status === 400 && error.data.message === 'Already Registered') {
-                    alert("username or email is already registered");
-                    } else {
-                    alert("Error registering user. Please try again.");
-                    console.error(error);
-                    }
+                    .catch(function (error) {
+                        if (error.status === 400 && error.data.message === 'Already Registered') {
+                            alert("Username or email is already registered. Redirecting to login.");
+                            window.location.href = 'login.html'; // Redirect if already registered
+                        } else {
+                            alert("Error registering user. Please try again.");
+                            console.error(error);
+                        }
+                    });
                 }
-        )}}});
+            };
+        });
     </script>
 </body>
 </html>

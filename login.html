@@ -3,51 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <title>Login</title>
     <style>
+        /* Page Styling */
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1500&q=80');
             background-size: cover;
             background-position: center;
-            background-image: url('https://coppertreehomes.com/wp-content/uploads/2022/08/dreamhome.jpg');
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent overlay */
+            z-index: -1;
+        }
+
+        /* Login Container Styling */
         .login-container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 12px;
             width: 350px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
             text-align: center;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
         }
 
         input {
             width: 100%;
             padding: 12px;
-            margin: 10px 0;
             border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
+            border-radius: 8px;
             font-size: 16px;
+            box-sizing: border-box;
         }
 
-        input[type="submit"] {
-            background-color: #1db86f;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #148d54;
+        input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
         }
 
         .error {
@@ -56,88 +76,87 @@
             margin-top: 5px;
         }
 
-        a {
-            display: block;
-            margin-top: 15px;
-            text-decoration: none;
-            color: #1db86f;
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
             font-weight: bold;
+            transition: background-color 0.3s ease;
         }
 
-        a:hover {
-            color: #148d54;
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .register-link {
+            margin-top: 15px;
+            display: block;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
             .login-container {
-                width: 100%;
-                margin: 20px;
+                width: 90%;
             }
         }
     </style>
 </head>
 <body ng-controller="LoginController">
+    <div class="overlay"></div>
     <div class="login-container">
         <h2>Login</h2>
-        <form name="loginForm" ng-submit="submitForm()" novalidate>
-            <!-- Email Field -->
-            <input type="email" name="email" ng-model="user.email" placeholder="Email" required ng-class="{'ng-invalid': loginForm.email.$touched && loginForm.email.$invalid}">
-            <span class="error" ng-show="loginForm.email.$touched && loginForm.email.$invalid">
-                <span ng-show="loginForm.email.$error.required">Email is required.</span>
-                <span ng-show="loginForm.email.$error.email">Enter a valid email.</span>
-            </span>
+        <form name="loginForm" ng-submit="submitLogin()" novalidate>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" ng-model="user.email" required placeholder="Enter your email">
+            </div>
 
-            <!-- Password Field -->
-            <input type="password" name="password" ng-model="user.password" placeholder="Password" required minlength="6" ng-class="{'ng-invalid': loginForm.password.$touched && loginForm.password.$invalid}">
-            <span class="error" ng-show="loginForm.password.$touched && loginForm.password.$invalid">
-                <span ng-show="loginForm.password.$error.required">Password is required.</span>
-                <span ng-show="loginForm.password.$error.minlength">Password must be at least 6 characters long.</span>
-            </span>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" ng-model="user.password" required placeholder="Enter your password">
+            </div>
 
-            <!-- Submit Button -->
-            <input type="submit" value="Login" ng-disabled="loginForm.$invalid">
+            <div class="error" ng-if="errorMessage">{{ errorMessage }}</div>
+
+            <button type="submit">Login</button>
         </form>
 
-        <a href="register.html">Don't have an account? Register</a>
+        <!-- Register link -->
+        <a href="register.html" class="register-link">Don't have an account?</a>
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
     <script>
-        // AngularJS Application Module
         var app = angular.module('loginApp', []);
 
-        // Controller
-        app.controller('LoginController', ['$scope', '$http', function($scope, $http) {
+        app.controller('LoginController', function($scope, $http) {
             $scope.user = {};
+            $scope.errorMessage = '';
 
-            // Function to submit the form
-            $scope.submitForm = function() {
-                if ($scope.loginForm.$valid) {
-                    // Send the data to the backend server
-                    $http.post('http://localhost:3000/login', {
-                        email: $scope.user.email,
-                        password: $scope.user.password
-                    })
-                    .then(function(response) {
-                        // Login was successful
-                        alert("Login successful!");
-                        console.log(response.data);
-                        // Redirect or perform any other actions upon successful login
-                        window.location.href = 'home.html'; // Replace with your desired page
-                    })
-                    .catch(function(error) {
-                        // Handle login errors
-                        if (error.status === 400 && error.data.message === 'Invalid credentials') {
-                            alert("Invalid email or password. Please try again.");
-                        } else {
-                            alert("Error logging in. Please try again.");
-                            console.error(error);
-                        }
-                    });
-                } else {
-                    alert("Please fix the errors and try again.");
-                }
+            $scope.submitLogin = function() {
+                $http.post('http://localhost:3000/login', {
+                    email: $scope.user.email,
+                    password: $scope.user.password
+                })
+                .then(function(response) {
+                    window.location.href = 'home1.html'; // Redirect on success
+                })
+                .catch(function(error) {
+                    $scope.errorMessage = 'Invalid email or password';
+                });
             };
-        }]);
+        });
     </script>
 </body>
 </html>

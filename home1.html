@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="realEstateApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <!-- For icons in about us -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #212121;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        }
+        .header-content {
+            display: flex;
+            align-items: center; /* Vertically centers the items */
+        }
+
+        .logo {
+            height: 50px; /* Adjust the height as needed */
+            margin-right: 20px; /* Space between logo and header text */
+        }
+
+
+
+        .login-btn {
+            background-color: transparent;
+            color: white;
+            padding: 10px 25px;
+            border: 2px solid white;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .login-btn:hover {
+            background-color: white;
+            color: rgb(29, 110, 111);
+            transform: translateY(-3px); /* Subtle lift on hover */
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding: 10px 0;
+            background-color: #FF5A3D;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link {
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: white;
+            color: rgb(17, 184, 156);
+            border-radius: 5px;
+            transform: scale(1.05);
+        }
+
+        .SP_redirect-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background-color: #FF5A3D;
+            color: whitesmoke;
+            border: 2px solid white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .SP_redirect-btn:hover {
+            background-color: white;
+            color: rgb(29, 110, 111);
+            transform: translateY(-3px);
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        h2 {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #FF5A3D;
+        }
+        
+        /* Featured properties container for layout */
+        .featured-properties-container {
+    display: flex;
+    overflow-x: auto;  /* Enable horizontal scrolling */
+    padding: 10px 0;   /* Add some vertical padding */
+    scroll-snap-type: x mandatory;  /* Optional: for smooth scrolling */
+}
+
+.featured-property {
+    flex: 0 0 auto;  /* Prevent flex items from shrinking */
+    width: calc(33.333% - 25px);  /* Set to take up one-third of the container, minus margins */
+    margin-right: 15px; /* Add some space between properties */
+    background-color: #3f3f3f;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    border-color: #f5f5f5;
+    border-style: inset;
+}
+
+.featured-property:hover {
+    transform: scale(1.05);
+}
+
+/* Ensure the images fit correctly */
+.featured-property img {
+    width: 100%;
+    height: 300px;  
+    object-fit: cover;
+    border-bottom: 2px solid #ddd;
+}
+
+/* Optional: Add some styles for scrolling */
+.featured-properties-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.featured-properties-container::-webkit-scrollbar-thumb {
+    background: #ccc; /* Scrollbar color */
+    border-radius: 10px;
+}
+
+.featured-properties-container::-webkit-scrollbar-thumb:hover {
+    background: #aaa; /* Scrollbar color on hover */
+}
+
+/* Title styling for property name */
+.featured-property h3 {
+    font-size: 20px; /* Adjust the font size for visibility */
+    font-weight: bold; /* Make the title bold */
+    margin: 10px; /* Keep margin for spacing */
+    color: #F6F6F6; /* Set a specific color */
+    transition: color 0.3s ease; /* Smooth transition for color change */
+}
+.featured-property h3.hovered {
+    color: #FF5A3D; /* Change text color to red on hover */
+    text-transform: uppercase; /* Ensure text is in uppercase */
+}
+
+/* Styling for location text */
+.featured-property p {
+    font-size: 14px; /* Font size for location */
+    margin: 5px 10px; /* Adjust margin for spacing */
+    color: #F6F6F6; /* Darker gray for contrast */
+}
+
+/* Styling for price */
+.featured-property .price {
+    font-size: 16px; /* Slightly larger for emphasis */
+    font-weight: bold; /* Make it bold for importance */
+    color: #FF5A3D; /* Match the theme color */
+}
+
+/* Styling for BHK count */
+.featured-property .bhk {
+    font-size: 14px; /* Standard size */
+    color: #F6F6F6; /* Lighter color for subtlety */
+}
+
+.AU_container {
+    display: flex; /* Align items side by side */
+    align-items: center; /* Vertically center the items */
+    margin: 40px 0; /* Add some space above and below the section */
+}
+
+.image-container {
+    flex: 1; /* Allow the image container to take one part of the flex space */
+    max-width: 100%; /* Ensure it doesn't overflow */
+}
+
+.text-container {
+    flex: 1; /* Allow the text container to take one part of the flex space */
+    max-width: 50%; /* Optional: set a max width for the text */
+    padding-left: 20px; /* Space between the image and text */
+    padding-right: 150px;
+    color: whitesmoke;
+}
+
+/* Button styling for Save */
+.save-btn {
+    background-color: #ff9800; /* Orange background */
+    color: white; /* White text */
+    padding: 8px 16px; /* Padding for the button */
+    border: none; /* No border */
+    border-radius: 20px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition */
+    margin-left: 10px; /* Space from the left */
+    margin-bottom: 10px; /* Space from the bottom */
+    font-weight: bold; /* Bold text */
+    font-size: 14px; /* Font size */
+}
+
+.save-btn:hover {
+    background-color: #e68900; /* Darker orange on hover */
+}
+
+.about-banner {
+    width: auto; /* Set the width to 100% of its container */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 800px; /* Set a max height to control the size */
+    padding-left: 150px;
+}
+
+h1 {
+    font-weight: bold; /* Make h1 bold */
+    font-style: italic; /* Make h1 italic */
+    font-size: 2.5rem; /* Increase font size for main heading */
+}
+
+h3 {
+    margin: 10px 0; /* Add space above and below the h3 */
+    font-size: 1.5rem; /* Increase font size for subheading */
+}
+
+.about-list { margin-bottom: 30px; }
+  
+  .about-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+
+  }
+  
+  .about-item-icon {
+    background: #f5dedb;
+    height: 45px;
+    min-width: 45px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+  }
+  
+  .about-item-icon ion-icon {
+    color: #ff5a3d;
+    font-size: 18px;
+  }
+
+
+
+
+
+
+/* Main Focus Section Styling */
+.main-focus-container {
+    text-align: center;
+    margin: 50px 0;
+    background-color: #212121;
+    height: 600px;
+}
+
+.main-focus-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: whitesmoke;
+    margin-top: 50px;
+}
+
+.focus-cards {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+    height: 400px;
+}
+
+.focus-card {
+    width: 300px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.focus-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.focus-card p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.focus-card a {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+    border: 2px solid #3498db;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.focus-card:hover {
+    transform: translateY(-10px);
+}
+ 
+.focus-card a:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+    </style>
+</head>
+    <body style="background: #1E1C1C;" ng-controller="PropertyController">
+    <header>
+        <div class="header-content">
+            <img src="img/logo 2.png" alt="Logo" class="logo">
+            <h1>Welcome to Real Estate Website</h1>
+        </div>
+        <h3>Find Your Dream House By Us</h3>
+
+        <nav>
+            <a href="#" class="nav-link">Contact Us</a>
+            <a href="post-property.html" class="nav-link">Post Property</a>
+            <a href="https://www.calculator.net/mortgage-calculator.html" class="nav-link">Mortgage Calculator</a>
+            <a href="saved-properties.html" class="nav-link">Saved Properties</a>
+        </nav>
+        
+        <a href="select-properties.html" class="SP_redirect-btn">Search Properties</a>
+    </header>
+
+    <div class="container">
+        <h2>Our Featured Properties</h2>
+    
+        <div class="featured-properties-container">
+            <div class="featured-property" ng-repeat="property in featuredProperties">
+                <img ng-src="{{property.image}}" alt="featured Property Image" ng-click="viewMore(property)">
+                <h3 ng-mouseenter="isHovered = true" ng-mouseleave="isHovered = false" ng-class="{'hovered': isHovered}">
+                    {{ isHovered ? (property.name | uppercase) : property.name }}
+                </h3>
+                <p class="location">{{property.location}}</p>
+                <p class="price">{{property.price | currency}}</p>
+                <p class="bhk">{{property.bhk}} BHK</p>
+                <button class="save-btn" ng-click="saveProperty(property)">Save</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- About Us Section -->
+    <div class="AU_container">
+        <div class="image-container">
+            <img src="img/about-banner-1.png" alt="About Us Banner" class="about-banner">
+        </div>
+        <div class="text-container">
+            <h1 style="font-weight: bold; font-style: italic;">About Us</h1>
+            <h1>The Leading Real Estate Rental Marketplace.</h1>
+            <h3>Over 39,000 people work for us in more than 70 countries all over the globe. This breadth of global coverage, combined with specialist services.</h3>
+            <ul class="about-list">
+
+                <li class="about-item">
+                  <div class="about-item-icon">
+                    <ion-icon name="home-outline"></ion-icon>
+                  </div>
+  
+                  <p class="about-item-text">Smart Home Design</p>
+                </li>
+  
+                <li class="about-item">
+                  <div class="about-item-icon">
+                    <ion-icon name="leaf-outline"></ion-icon>
+                  </div>
+  
+                  <p class="about-item-text">Beautiful Scene Around</p>
+                </li>
+  
+                <li class="about-item">
+                  <div class="about-item-icon">
+                    <ion-icon name="wine-outline"></ion-icon>
+                  </div>
+  
+                  <p class="about-item-text">Exceptional Lifestyle</p>
+                </li>
+  
+                <li class="about-item">
+                  <div class="about-item-icon">
+                    <ion-icon name="shield-checkmark-outline"></ion-icon>
+                  </div>
+  
+                  <p class="about-item-text">Complete 24/7 Security</p>
+                </li>
+  
+              </ul>
+        </div>
+    </div>
+
+    <!-- Our Main Focus Section -->
+<div class="main-focus-container">
+    <h1>Our Main Focus</h1> <br><br>
+
+    <div class="focus-cards">
+        <!-- First Card: Buy a home -->
+        <!-- First Card: Buy a home -->
+    <div class="focus-card">
+        <div class="card-icon">
+            <img src="img/service-1.png" alt="Service icon">
+        </div>
+        <h3>Buy a Home</h3>
+        <p>Over 1 million+ homes for sale available on the website. We can match you with a house you will want to call home.</p><br>
+        <a href="select-properties.html" class="focus-link">Buy a Home</a>
+    </div>
+
+    <!-- Second Card: Rent a home -->
+    <div class="focus-card">
+        <div class="card-icon">
+            <img src="img/service-1.png" alt="Service icon">
+        </div>
+        <h3>Rent a Home</h3>
+        <p>Find rental properties on our website. Whether it's short-term or long-term, we have options that fit your needs.</p><br>
+        <a href="#" class="focus-link">Find a Home</a>
+    </div>
+
+    <!-- Third Card: Sell a home -->
+    <div class="focus-card">
+        <div class="card-icon">
+            <img src="img/service-1.png" alt="Service icon">
+        </div>
+        <h3>Sell a Home</h3>
+        <p>Looking to sell? We provide the tools and expertise you need to list your home and attract potential buyers quickly.</p><br>
+        <a href="post-property.html" class="focus-link">Sell a Home</a>
+    </div>
+
+</div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module('realEstateApp', []);
+
+        app.controller('PropertyController', function($scope) {
+            $scope.featuredProperties = [
+                {
+                    id: 1,
+                    name: 'Green Valley',
+                    location: 'Mumbai',
+                    price: 900000,
+                    bhk: 4,
+                    image: 'https://content.jdmagicbox.com/v2/comp/mumbai/t9/022pxx22.xx22.220321192525.y7t9/catalogue/green-valley-resort-palghar-apmtd7il7n.jpg'
+                },
+                {
+                    id: 2,
+                    name: 'Sunshine Residency',
+                    location: 'Pune',
+                    price: 600000,
+                    bhk: 3,
+                    image: 'https://is1-2.housingcdn.com/4f2250e8/0b3772ab29cb4adeee57d824028c5275/v2/fs/sunshine_residency-lulla_nagar-pune-concrete_constructions_pune.jpeg'
+                },
+                {
+                    id: 3,
+                    name: 'Elite Tower',
+                    location: 'Nagpur',
+                    price: 800000,
+                    bhk: 5,
+                    image: 'https://images.timesproperty.com/properties/photos/2403/mini/1.jpg'
+                },
+                {
+                    id: 4,
+                    name: 'Ocean View Apartments',
+                    location: 'Mumbai',
+                    price: 1200000,
+                    bhk: 4,
+                    image: 'https://www.homebazaar.com/knowledge/wp-content/uploads/2022/07/Sea-Facing-House.jpg'
+                },
+                {
+                    id: 5,
+                    name: 'Maple Heights',
+                    location: 'Pune',
+                    price: 950000,
+                    bhk: 3,
+                    image: 'https://images.jdmagicbox.com/comp/mumbai/w7/080pxx80.xx80.180222224527.x2w7/catalogue/ncc-maple-heights-b-narayanapura-bangalore-8gjsihj74r-250.jpg'
+                },
+                {
+                    id: 6,
+                    name: 'The Crest',
+                    location: 'Nagpur',
+                    price: 850000,
+                    bhk: 2,
+                    image: 'https://housing-images.n7net.in/012c1500/1019e806ead2009a976f469c8bee9b9a/v0/medium.jpeg'
+                },
+                {
+                    id: 7,
+                    name: 'Royal Park Residency',
+                    location: 'Sambhajinagar',
+                    price: 1100000,
+                    bhk: 4,
+                    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWy67qyGm21ccjuMO72vWOj14EzeyfoLFWUA&s'
+                },
+                {
+                    id: 8,
+                    name: 'Palm Springs',
+                    location: 'Solapur',
+                    price: 700000,
+                    bhk: 3,
+                    image: 'https://static.squareyards.com/resources/images/mumbai/project-image/arvel-palm-springs-project-project-large-image1-7159.jpg'
+                },
+                {
+                    id: 9,
+                    name: 'Urban Oasis',
+                    location: 'Pune',
+                    price: 950000,
+                    bhk: 3,
+                    image: 'https://assets.architecturaldigest.in/photos/60004e02e8f3e4731557cbba/16:9/w_2560%2Cc_limit/Urban-Oasis_01-1366x768.jpg'
+                },
+                {
+                    id: 10,
+                    name: 'Skyline Tower',
+                    location: 'Mumbai',
+                    price: 1300000,
+                    bhk: 5,
+                    image: 'https://cdn.crtkl.com/wp-content/uploads/sites/1/2015/08/indiabulls-2.jpg'
+                }
+            ];
+
+            $scope.saveProperty = function(property) {
+                let savedProperties = JSON.parse(localStorage.getItem('savedProperties')) || [];
+                savedProperties.push(property);  // Add the new property
+                localStorage.setItem('savedProperties', JSON.stringify(savedProperties));  // Save to local storage
+                alert(property.name + " has been saved!");
+            };
+            $scope.viewMore = function(property) {
+                window.location.href = 'property-details.html?id=' + property.id;
+            };
+
+        });
+
+            //localStorage.removeItem('savedProperties');// Clear local storage
+
+    </script>
+</body>
+</html>
