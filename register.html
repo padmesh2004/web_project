@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="registrationApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-size: cover;
+            background-position: center;
+            background-image: url(https://coppertreehomes.com/wp-content/uploads/2022/08/dreamhome.jpg);
+        }
+
+        .registration-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            width: 350px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        button:disabled {
+            background-color: #ddd;
+            cursor: not-allowed;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: #218838;
+        }
+
+        @media (max-width: 768px) {
+            .registration-container {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body ng-controller="RegistrationController">
+    <div class="registration-container">
+        <h2>Register</h2>
+        <form name="registrationForm" ng-submit="submitForm()" novalidate>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" ng-model="user.username" required minlength="3" ng-class="{'ng-invalid': registrationForm.username.$touched && registrationForm.username.$invalid}">
+                <span class="error" ng-show="registrationForm.username.$touched && registrationForm.username.$invalid">
+                    <span ng-show="registrationForm.username.$error.required">Username is required.</span>
+                    <span ng-show="registrationForm.username.$error.minlength">Username must be at least 3 characters long.</span>
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" name="email" ng-model="user.email" required ng-class="{'ng-invalid': registrationForm.email.$touched && registrationForm.email.$invalid}">
+                <span class="error" ng-show="registrationForm.email.$touched && registrationForm.email.$invalid">
+                    <span ng-show="registrationForm.email.$error.required">Email is required.</span>
+                    <span ng-show="registrationForm.email.$error.email">Please enter a valid email address.</span>
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password" ng-model="user.password" required minlength="6" ng-class="{'ng-invalid': registrationForm.password.$touched && registrationForm.password.$invalid}">
+                <span class="error" ng-show="registrationForm.password.$touched && registrationForm.password.$invalid">
+                    <span ng-show="registrationForm.password.$error.required">Password is required.</span>
+                    <span ng-show="registrationForm.password.$error.minlength">Password must be at least 6 characters long.</span>
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password:</label>
+                <input type="password" name="confirmPassword" ng-model="user.confirmPassword" required ng-class="{'ng-invalid': registrationForm.confirmPassword.$touched && registrationForm.confirmPassword.$invalid}">
+                <span class="error" ng-show="registrationForm.confirmPassword.$touched && registrationForm.confirmPassword.$invalid || (user.password !== user.confirmPassword)">
+                    <span ng-show="registrationForm.confirmPassword.$error.required">Confirm password is required.</span>
+                    <span ng-show="user.password !== user.confirmPassword && registrationForm.confirmPassword.$touched">Passwords do not match.</span>
+                </span>
+            </div>
+
+            <button type="submit" ng-disabled="registrationForm.$invalid">Register</button>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module('registrationApp', []);
+
+        app.controller('RegistrationController', function($scope, $http) {
+            $scope.user = {};
+
+            // Function to handle form submission
+            $scope.submitForm = function() {
+                if ($scope.user.password !== $scope.user.confirmPassword) {
+                    alert("Passwords do not match!");
+                    return;
+                }
+
+                if ($scope.registrationForm.$valid) {
+                    // Send the data to the backend server
+                    $http.post('http://localhost:3000/register', {
+                        username: $scope.user.username,
+                        email: $scope.user.email,
+                        password: $scope.user.password
+                    })
+                    .then(function(response) {
+                        alert("Registration successful!");
+                        console.log(response.data);
+                        window.location.href = 'login.html'; //redirects to login.html
+                    })
+                    .catch(function(error) {
+                    // Handle the "Already Registered" message or other errors
+                    if (error.status === 400 && error.data.message === 'Already Registered') {
+                    alert("username or email is already registered");
+                    } else {
+                    alert("Error registering user. Please try again.");
+                    console.error(error);
+                    }
+                }
+        )}}});
+    </script>
+</body>
+</html>

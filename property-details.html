@@ -1,0 +1,755 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--WHILE DOING BACKEND ENSURE THAT THE PROPERTY ID MUST ALSO BE SEND WITH REGISTRATION FORM-->
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" ng-app="realEstateApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1E1C1C;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1.hovered, h2.hovered, h3.hovered, p.hovered  {
+            color: #FF5A3D; /* Change text color to red on hover */
+            text-transform: uppercase; /* Ensure text is in uppercase */
+        }
+        h1 {
+            text-align: center;
+            color: #f5dedb;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+        .float-container {
+            display: flex;  /* Enable flexbox */
+            justify-content: space-between; /* Space them apart */
+            align-items: flex-start;  /* Align items at the start of the container */
+            padding: 20px;
+        }
+        .property-container, .MyForm {
+            max-width: 48%;
+            background: #212121;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            padding: 10px;
+        }
+
+        .property-container:hover {
+            transform: scale(1.02);
+        }
+
+        img {
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        h2 {
+            margin: 15px 0;
+            color: whitesmoke;
+            font-size: 2em;
+            border-bottom: 2px solid #29a19c;
+            padding-bottom: 10px;
+        }
+
+        .back-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #29a19c;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            font-size: 1.2em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button:hover {
+            background-color: #238e8c;
+        }
+
+        .image-gallery {
+            display: flex;
+            overflow-x: auto; /* Enables horizontal scrolling */
+            gap: 10px;
+            padding: 10px 0;
+        }
+
+        .image-gallery img {
+            flex: 0 0 300px; /* Set a larger fixed width for images */
+            height: 600px; /* Maintain aspect ratio */
+            border-radius: 12px;
+            transition: transform 0.3s;
+        }
+
+        .image-gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        p {
+            font-size: 1.1em;
+            margin: 10px 0;
+            color: #f5dedb;
+        }
+
+        .amenities-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .amenity-item {
+            margin: 5px 0;
+            font-size: 1.1em;
+            color: #f5dedb;
+        }
+
+        .amenity-item i {
+            margin-right: 10px;
+            color: #29a19c;
+        }
+
+        /*MyFrom CSS*/
+
+        .MyForm {
+            width: 50%;
+            float: left; /* Ensures the form is aligned next to the property details */
+            padding: 20px;
+            background: rgba(33, 33, 33, 0.9); /* Semi-transparent dark background */
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+            background-color: whitesmoke;
+        }
+
+        h2 {
+            color: #FF5A3D; /* Heading color */
+            margin-bottom: 15px;
+            text-align: center; /* Center the heading */
+        }
+
+        .form-group {
+            margin-bottom: 15px; /* Space between form groups */
+        }
+
+        .form-group p{
+            color:#0D2D23;
+            font-size: x-large;
+            font-weight: bolder ;
+        }
+
+        label {
+            display: block; /* Stack labels above inputs */
+            margin-bottom: 5px; /* Space between label and input */
+            color: #0D2D23; /* Label color */
+            font-weight: bolder;
+            font-size: larger;
+        }
+
+        input[type="text"], input[type="email"], input[type="number"], input[type="radio"] {
+            width: 98%; /* Full width of the parent container */
+            padding: 15px; /* Space inside the input fields */
+            border: 1px solid #29a19c; /* Border color */
+            border-radius: 5px; /* Rounded corners for inputs */
+            background: rgba(255, 255, 255, 0.1); /* Slightly transparent background for inputs */
+            color: #226A1F; /* Input text color */
+            transition: border-color 0.3s; /* Smooth border color transition */
+            font-size: large;
+            font-weight: bolder;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="number"]:focus {
+            border-color: #FF5A3D; /* Change border color on focus */
+            outline: none; /* Remove default outline */
+        }
+
+        .radio-group {
+            margin: 5px 0; /* Space between radio groups */
+        }
+
+        input[type="submit"] {
+            width: 100%; /* Full width for the submit button */
+            padding: 10px; /* Space inside the button */
+            background-color: #29a19c; /* Button background color */
+            color: white; /* Button text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners for the button */
+            cursor: pointer; /* Change cursor on hover */
+            transition: background-color 0.3s; /* Smooth background color transition */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #238e8c; /* Darker shade on hover */
+        }
+
+        .error {
+            color: #FF5A3D; /* Error message color */
+            font-size: 0.9em; /* Smaller font for error messages */
+        }
+
+    </style>
+</head>
+<body ng-controller="PropertyDetailsController">
+
+    <h1 ng-mouseenter="isHovered = true" ng-mouseleave="isHovered = false" ng-class="{'hovered': isHovered}">
+        {{ isHovered ? ('Property Details' | uppercase) : 'Property Details' }}
+    </h1>
+    <div class="float-container">
+        <div class="property-container" ng-if="property">
+            <h2 ng-mouseenter="isHovered = true" ng-mouseleave="isHovered = false" ng-class="{'hovered': isHovered}">
+                {{ isHovered ? (property.name | uppercase) : property.name }}
+            </h2>
+            <div class="image-gallery">
+                <img ng-src="{{property.images[0]}}" alt="Main Property Image">
+                <img ng-repeat="image in property.images.slice(1)" ng-src="{{image}}" alt="Property Image {{ $index + 1 }}">
+            </div>
+            <p><strong>Location:</strong> {{property.location}}</p>
+            <p><strong>Price:</strong> {{property.price | currency : "&#8377;"}} </p>
+            <p><strong>BHK:</strong> {{property.bhk}} BHK</p>
+            <p><strong>Description:</strong> {{property.description}}</p>
+
+            <h2 ng-mouseenter="isHoveredAmenities = true" ng-mouseleave="isHoveredAmenities = false" ng-class="{'hovered': isHoveredAmenities}">
+                Amenities:
+            </h2>
+            <h2><ul class="amenities-list">
+                <li class="amenity-item" ng-repeat="amenity in property.amenities">
+                    <i class="fas" ng-class="getAmenityIcon(amenity)"></i>{{amenity}}
+                </li>
+            </ul></h2>
+        </div>
+
+        <div class="MyForm" ng-app="realEstateApp" ng-controller="FormController">
+            <form name="registrationForm" ng-submit="submitForm()" novalidate>
+        
+                <h2 ng-mouseenter="isHovered = true" ng-mouseleave="isHovered = false" ng-class="{'hovered': isHovered}">
+                    {{ isHovered ? ('Real Estate Customer Registration Form'| uppercase) : 'Real Estate Customer Registration Form' }}
+                </h2>        
+                <!-- First Name Field -->
+                <div class="form-group">
+                    <label for="first-name">First Name:</label>
+                    <input type="text" id="first-name" name="firstName" ng-model="user.firstName" required>
+                    <!-- Error message -->
+                    <div class="error" ng-show="registrationForm.firstName.$touched && registrationForm.firstName.$invalid">
+                        First Name is required.
+                    </div>
+                </div>
+        
+                <!-- Last Name Field -->
+                <div class="form-group">
+                    <label for="last-name">Last Name:</label>
+                    <input type="text" id="last-name" name="lastName" ng-model="user.lastName" required>
+                    <!-- Error message -->
+                    <div class="error" ng-show="registrationForm.lastName.$touched && registrationForm.lastName.$invalid">
+                        Last Name is required.
+                    </div>
+                </div>
+        
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" ng-model="user.email" required>
+                    <!-- Error message -->
+                    <div class="error" ng-show="registrationForm.email.$touched && registrationForm.email.$invalid">
+                        Valid Email is required.
+                    </div>
+                </div>
+        
+                <!-- Age Field -->
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" ng-model="user.age" min="18" required>
+                    <!-- Error message -->
+                    <div class="error" ng-show="registrationForm.age.$touched && registrationForm.age.$invalid">
+                        Age must be at least 18.
+                    </div>
+                </div>
+        
+                <!-- Marital Status -->
+                <div class="form-group">
+                    <p>Are you currently:</p>
+                    <div class="radio-group">
+                        <input type="radio" id="married" name="maritalStatus" ng-model="user.maritalStatus" value="married" required>
+                        <label for="married">Married</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="divorced" name="maritalStatus" ng-model="user.maritalStatus" value="divorced" required>
+                        <label for="divorced">Divorced</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="other" name="maritalStatus" ng-model="user.maritalStatus" value="other" required>
+                        <label for="other">Other</label>
+                    </div>
+                    <!-- Error message -->
+                    <div class="error" ng-show="registrationForm.maritalStatus.$touched && !user.maritalStatus">
+                        Marital status is required.
+                    </div>
+                </div>
+        
+                <!-- Looking To -->
+                <div class="form-group">
+                    <p>Are you looking to:</p>
+                    <div class="radio-group">
+                        <input type="radio" id="rent" name="lookingTo" ng-model="user.lookingTo" value="rent" required>
+                        <label for="rent">Rent</label>
+                    </div>
+                    <div class="radio-group">
+                        <input type="radio" id="buy" name="lookingTo" ng-model="user.lookingTo" value="buy" required>
+                        <label for="buy">Buy</label>
+                    </div>
+                    <!-- Error message -->
+                    <div class="error" ng-show="registrationForm.lookingTo.$touched && !user.lookingTo">
+                        Please select an option.
+                    </div>
+                </div>
+        
+                <!-- Submit Button -->
+                <div class="form-group">
+                    <input type="submit" value="Submit" ng-disabled="registrationForm.$invalid">
+                </div>
+            </form>
+        </div>
+        
+    </div>
+    
+    <p ng-if="!property"Loading...></p>
+
+    <a href="home.html" class="back-button">Back to Home</a>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module('realEstateApp', []);
+
+        app.controller('PropertyDetailsController', function($scope) {
+            var detailedProperties = [
+            {
+                    id: 1,
+                    name: 'Green Valley',
+                    location: 'Mumbai',
+                    price: 900000,
+                    bhk: 4,
+                    images: [
+                        'https://content.jdmagicbox.com/v2/comp/mumbai/t9/022pxx22.xx22.220321192525.y7t9/catalogue/green-valley-resort-palghar-apmtd7il7n.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/305/57/9990/Living%20Room.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/305/57/9990/Bedroom-1.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/305/57/9990/Bedroom-2.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/305/57/9990/Pooja.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/305/57/9990/TV%20Unit.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/89/53/9990/IMG_1935.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/89/53/9990/IMG_1936.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/89/52/9990/IMG_1488.png',
+                    ],
+                    description: 'A luxurious 4 BHK apartment with stunning views and modern interiors.',
+                    amenities: ['Swimming Pool', 'Gym', 'Garden', 'Clubhouse', 'Parking']
+                },
+                {
+                    id: 2,
+                    name: 'Sunshine Residency',
+                    location: 'Pune',
+                    price: 600000,
+                    bhk: 3,
+                    images: [
+                        'https://is1-2.housingcdn.com/4f2250e8/0b3772ab29cb4adeee57d824028c5275/v2/fs/sunshine_residency-lulla_nagar-pune-concrete_constructions_pune.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/48/9990/da3e4342-2a4d-4299-9f29-9e49c840ca99.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/48/9990/b9d572c8-7a97-4659-85f8-6a30ee6ebb22.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/48/9990/3fe4652c-d048-4364-8fa9-37bcc848b256.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/48/9990/26819199-5e42-4fc9-973a-3d277e938d52.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/48/9990/fecbcc1c-6562-430b-9693-81cead0891be.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/48/9990/22de754e-6bd8-47d7-a24d-6433c6c639c9.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/48/9990/b71ac7b0-2dee-4fca-b9b6-c21ca3958218.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/48/9990/00988aab-59ec-4e14-8108-d37b353a223e.jpg',
+                        'PROPERTY_IMAGES/3bhk/1/8.pnghttps://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/26/34/9990/10D8A6185.jpg',
+                    ],
+                    description: 'A modern 3 BHK residence with easy access to amenities and parks.',
+                    amenities: ['Children\'s Play Area', 'Gym', '24/7 Security', 'Parking']
+                },
+                {
+                    id: 3,
+                    name: 'Elite Tower',
+                    location: 'Nagpur',
+                    price: 800000,
+                    bhk: 5,
+                    images: [
+                        'https://images.timesproperty.com/properties/photos/2403/mini/1.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_2_MG20180403WA0048_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_6_MG20180403WA0029_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_8_MG20180403WA0026_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_11_MG20180403WA0016_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_13_MG20180403WA0024_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_14_MG20180403WA0021_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_4_MG20180403WA0036_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_7_MG20180403WA0027_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_10_MG20180403WA0023_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_9_MG20180403WA0017_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_1_MG20180517WA0008_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jun/09/Photo_h470_w1080/73228629_3_MG20180403WA0037_470_1080.jpg',
+                        ''
+                    ],
+                    description: 'A spacious 5 BHK apartment located in a prime area with panoramic views.',
+                    amenities: ['Gym', 'Garden', 'Roof Top Lounge', 'Swimming Pool']
+                },
+                {
+                    id: 4,
+                    name: 'Ocean View Apartments',
+                    location: 'Mumbai',
+                    price: 1200000,
+                    bhk: 4,
+                    images: [
+                        'https://www.homebazaar.com/knowledge/wp-content/uploads/2022/07/Sea-Facing-House.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/d372f152-79c4-4537-b00d-78cb0d6e58ec.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/5dddd142-bf9a-4d35-8904-3da27a88b4e5.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/9ebd8666-882c-4013-b90a-b68ca4d418ed.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/28b91b5f-31f5-4307-8231-14a1b822dfb0.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/330dea66-4db2-4804-a4da-40f8bb2a81d4.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/4019a05a-ca4a-4051-a411-d42b5fb207af.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/b44882f3-8184-47e1-9afc-d3799fef5788.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/5538b4b4-72ec-458a-a9d7-708c1e8e738e.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/b9968aa0-92ee-4ec4-a4ff-06ff5439ef7f.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/c53b55eb-834a-4f59-a43d-4760f1148ced.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/df99c4a5-6e4c-4b72-ab85-adffa556d78f.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/42/45/9990/ec841d61-5c9b-41e5-a97e-4aff1c411573.jpeg',
+                    ],
+                    description: 'Luxury apartments with sea views and top-notch amenities.',
+                    amenities: ['Beach Access', 'Swimming Pool', 'Fitness Center', 'Spa', '24/7 Security']
+                },
+                {
+                    id: 5,
+                    name: 'Maple Heights',
+                    location: 'Pune',
+                    price: 950000,
+                    bhk: 3,
+                    images: [
+                        'https://images.jdmagicbox.com/comp/mumbai/w7/080pxx80.xx80.180222224527.x2w7/catalogue/ncc-maple-heights-b-narayanapura-bangalore-8gjsihj74r-250.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/37/41/9990/RA_19950.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/37/41/9990/RA_19968.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/37/41/9990/RA_19918.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/37/41/9990/RA_19949.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/26/28/9990/1D8A5722-Edit.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/26/28/9990/1D8A5763-Edit.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/26/28/9990/1D8A5885-Edit.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/26/28/9990/1D8A5847-Edit.jpg',
+                    ],
+                    description: 'A modern 3 BHK with contemporary design and amenities.',
+                    amenities: ['Garden', 'Gym', 'Children\'s Play Area', 'Parking']
+                },
+                {
+                    id: 6,
+                    name: 'The Crest',
+                    location: 'Nagpur',
+                    price: 850000,
+                    bhk: 2,
+                    images: [
+                        'https://housing-images.n7net.in/012c1500/1019e806ead2009a976f469c8bee9b9a/v0/medium.jpeg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/5/43/9990/_MG_5850.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/5/43/9990/_MG_5796.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/5/43/9990/_MG_5891.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/5/43/9990/_MG_5864.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/5/43/9990/_MG_5878.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/5/43/9990/_MG_5904.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/5/43/9990/_MG_5913.jpg',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/25/31/9990/wove7.jpg'
+                    ],
+                    description: 'A cozy 2 BHK apartment with all essential amenities.',
+                    amenities: ['Gym', 'Garden', '24/7 Water Supply', 'Security']
+                },
+                {
+                    id: 7,
+                    name: 'Royal Park Residency',
+                    location: 'Sambhajinagar',
+                    price: 1100000,
+                    bhk: 4,
+                    images: [
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSWy67qyGm21ccjuMO72vWOj14EzeyfoLFWUA&s',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/92/20/9990/Screenshot%202024-05-21%20115706.png',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/92/20/9990/Screenshot%202024-05-21%20115859.png',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/92/20/9990/Screenshot%202024-05-21%20115748.png',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/92/20/9990/Screenshot%202024-05-21%20115828.png',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/92/20/9990/Screenshot%202024-05-21%20115939.png',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/92/20/9990/Screenshot%202024-05-21%20120007.png',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/92/19/9990/Screenshot%202024-05-21%20115150.png',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/92/19/9990/Screenshot%202024-05-21%20115216.png',
+                        'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/92/19/9990/Screenshot%202024-05-21%20115340.png'
+                    ],
+                    description: 'Luxury living with modern amenities and spacious apartments.',
+                    amenities: ['Swimming Pool', 'Gym', 'Clubhouse', 'Parking']
+                },
+                {
+                    id: 8,
+                    name: 'Palm Springs',
+                    location: 'Solapur',
+                    price: 700000,
+                    bhk: 3,
+                    images: [
+                        'https://static.squareyards.com/resources/images/mumbai/project-image/arvel-palm-springs-project-project-large-image1-7159.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Aug/25/Photo_h470_w1080/74531017_6_da21caadd39442bb4bdf06e65e4db1d_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Aug/25/Photo_h470_w1080/74531017_3_MG20191003172543_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Aug/25/Photo_h470_w1080/74531017_4_MG20191116181110_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Aug/25/Photo_h470_w1080/74531017_5_MG20191116181026_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Aug/25/Photo_h470_w1080/74531017_1_MG20191116180949_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Aug/25/Photo_h470_w1080/74531017_2_hatsAppImage20210705at4.14.51PM_470_1080.jpeg',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2021/05/07/Project-Photo-66-Rivali-Park-Mumbai-5022300_526_800_470_1080.jpg'
+                    ],
+                    description: 'A family-friendly 3 BHK with beautiful landscaping and amenities.',
+                    amenities: ['Children\'s Play Area', 'Garden', 'Gym']
+                },
+                {
+                    id: 9,
+                    name: 'Sunrise Heights',
+                    location: 'Nagpur',
+                    price: 500000,
+                    bhk: 1,
+                    images: [
+                        'https://media.istockphoto.com/id/1020706848/photo/home-interior.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Feb/07/Photo_h470_w1080/71254211_1_PropertyImage1707287720127_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Feb/07/Photo_h470_w1080/71254211_2_PropertyImage1707287747600_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Feb/07/Photo_h470_w1080/71254211_5_PropertyImage1707287788514_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Feb/07/Photo_h470_w1080/71254211_10_PropertyImage1707287855452_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Feb/07/Photo_h470_w1080/71254211_11_PropertyImage1707287873058_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Feb/07/Photo_h470_w1080/71254211_7_PropertyImage1707287823632_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Feb/07/Photo_h470_w1080/71254211_8_PropertyImage1707287836894_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Feb/07/Photo_h470_w1080/71254211_9_PropertyImage1707287844421_470_1080.jpg'
+                    ],
+                    description: 'A compact 1 BHK ideal for singles or couples.',
+                    amenities: ['Parking', '24/7 Security']
+                },
+                {
+                    id: 10,
+                    name: 'Lush Greens',
+                    location: 'Mumbai',
+                    price: 1200000,
+                    bhk: 5,
+                    images: [
+                        'https://www.owaytravel.com/wp-content/uploads/2019/01/luxury-apartments.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jul/25/Photo_h470_w1080/74003909_3_883f1ec905f476cb3e1b158ec5b13c2_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jul/25/Photo_h470_w1080/74003909_4_989e616e6fb4056bfa7e6d13a5dfc32_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jul/25/Photo_h470_w1080/74003909_5_1197f127c62441ebf83eafbe007849f_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jul/25/Photo_h470_w1080/74003909_9_b4062c7935448a8a1d0509da109d4cc_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jul/25/Photo_h470_w1080/74003909_11_bd964469ef5453baa6ba68de70b158d_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jul/25/Photo_h470_w1080/74003909_1_f55b414ef1749eeaa2cce60a605a196_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jul/25/Photo_h470_w1080/74003909_6_83dff0b85594cdb9c93ed8d58902b68_470_1080.jpg',
+                        'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Jul/25/Photo_h470_w1080/74003909_12_0377248aa074bc6a6e6418c6509eeb9_470_1080.jpg',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/Project-Photo-9-RNA-Mirage-Mumbai-5000377_1296_972_470_1080.JPEG',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/Project-Photo-13-RNA-Mirage-Mumbai-5000377_1296_972_470_1080.JPEG',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/Project-Photo-18-RNA-Mirage-Mumbai-5000377_1231_1387_470_1080.JPEG',
+                        'https://img.staticmb.com/mbphoto/locality/cropped_images/2024/Jul/29/Photo_h470_w1080/78910_IMG_6719---Ritik-katkar_470_1080.jpeg',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2021/01/21/Project-Photo-38-Windsor-Grande-Residences-Mumbai-5041040_600_800_470_1080.jpg',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2021/01/21/Project-Photo-39-Windsor-Grande-Residences-Mumbai-5041040_600_800_470_1080.jpg',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2021/01/21/Project-Photo-40-Windsor-Grande-Residences-Mumbai-5041040_600_800_470_1080.jpg',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2021/01/21/Project-Photo-41-Windsor-Grande-Residences-Mumbai-5041040_600_800_470_1080.jpg',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2021/01/21/Project-Photo-42-Windsor-Grande-Residences-Mumbai-5041040_600_800_470_1080.jpg',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2021/01/21/Project-Photo-43-Windsor-Grande-Residences-Mumbai-5041040_600_800_470_1080.jpg',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2021/01/21/Project-Photo-44-Windsor-Grande-Residences-Mumbai-5041040_600_800_470_1080.jpg',
+                        'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2021/01/21/Project-Photo-50-Windsor-Grande-Residences-Mumbai-5041040_600_800_470_1080.jpg'
+
+                    ],
+                    description: 'An exquisite 5 BHK home with lush surroundings and high-end amenities.',
+                    amenities: ['Swimming Pool', 'Gym', 'Garden', 'Clubhouse']
+                },
+                        {
+                            id: 11,
+                            name: 'Mirage',
+                            location: 'Mumbai',
+                            price: 350000,
+                            bhk: 3,
+                            image: [
+                                'https://4.imimg.com/data4/JP/SW/MY-12843625/mirage1.jpg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Apr/04/Photo_h470_w1080/66410613_10_hatsAppImage20211128at19.24.06_470_1080.jpeg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Apr/04/Photo_h470_w1080/66410613_16_hatsAppImage20211128at19.24.01_470_1080.jpeg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Apr/04/Photo_h470_w1080/66410613_18_hatsAppImage20211128at19.23.591_470_1080.jpeg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Apr/04/Photo_h470_w1080/66410613_19_hatsAppImage20211128at19.23.58_470_1080.jpeg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Apr/04/Photo_h470_w1080/66410613_5_hatsAppImage20211128at19.24.21_470_1080.jpeg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Apr/04/Photo_h470_w1080/66410613_6_hatsAppImage20211128at19.24.131_470_1080.jpeg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Apr/04/Photo_h470_w1080/66410613_7_hatsAppImage20211128at19.24.11_470_1080.jpeg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Apr/04/Photo_h470_w1080/66410613_8_hatsAppImage20211128at19.24.111_470_1080.jpeg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Apr/04/Photo_h470_w1080/66410613_1_hatsAppImage20211128at19.24.16_470_1080.jpeg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Feb/07/Photo_h470_w1080/71254211_6_PropertyImage1707287808227_470_1080.jpg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Feb/07/Photo_h470_w1080/71254211_12_PropertyImage1707287894599_470_1080.jpg'
+                            ],
+                            description: 'A cozy 3 BHK apartment perfect for families looking for affordability in a prime location.',
+                            amenities: ['Parking', '24/7 Security', 'Children\'s Play Area']
+                        },
+                        {
+                            id: 12,
+                            name: 'Keerthi Apartment',
+                            location: 'Pune',
+                            price: 750000,
+                            bhk: 2,
+                            image: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYvYRHHPwU0LYmKz8BZ715b1CmkllLBgOJvg&s',
+                                'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/25/31/9990/wove.jpg',
+                                'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/25/31/9990/wove5_.jpg',
+                                'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/25/31/9990/wov2.jpg',
+                                'https://s3.ap-south-1.amazonaws.com/mbprodimages/images/interiorDesignerCMS/decorPartner/25/31/9990/wove3.jpg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Aug/20/Photo_h470_w1080/60986769_4_PropertyImage1724108254161_470_1080.jpg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Aug/20/Photo_h470_w1080/60986769_5_PropertyImage1724108270365_470_1080.jpg'
+                            ],
+                            description: 'A modern 2 BHK apartment with contemporary design and amenities in a serene neighborhood.',
+                            amenities: ['Gym', 'Garden', 'Parking', 'Lift']
+                        },
+                        {
+                            id: 13,
+                            name: 'CourtYard Square',
+                            location: 'Nagpur',
+                            price: 450000,
+                            bhk: 1,
+                            image: ['https://img.staticmb.com/mbphoto/property/cropped_images/2018/Feb/15/Photo_h300_w450/31809573_7_OutsideElevation_300_450.jpg',
+                                'https://img.staticmb.com/mbphoto/locality/cropped_images/2022/Jul/7/Photo_h470_w1080/88623_IMG-20220520-WA0091---Farooque-Shaikh_470_1080.jpg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Jan/11/Photo_h470_w1080/65080233_6_nterior1_470_1080.jpg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Jan/19/Photo_h470_w1080/65080233_9_1a_470_1080.jpg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Jan/11/Photo_h470_w1080/65080233_5_nterior5_470_1080.jpg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Jan/19/Photo_h470_w1080/65080233_8_edroom_470_1080.jpg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Jan/11/Photo_h470_w1080/65080233_4_nterior3_470_1080.jpg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Jan/19/Photo_h470_w1080/65080233_6_itchen_470_1080.jpg',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2023/Jan/19/Photo_h470_w1080/65080233_7_ashroom_470_1080.jpg',
+                                'https://img.staticmb.com/mbphoto/locality/cropped_images/2022/Jun/8/Photo_h470_w1080/60017_DSCN9790---Shahalam-Shaikh-1_470_1080.JPG'
+                            ],
+                            description: 'An affordable 1 BHK ideal for singles or couples looking for a compact living space.',
+                            amenities: ['24/7 Water Supply', 'Security', 'Parking']
+                        },
+                        {
+                            id: 14,
+                            name: 'Sri Venkatdri Enclave',
+                            location: 'Sambhajinagar',
+                            price: 250000,
+                            bhk: 3,
+                            image: ['https://is1-2.housingcdn.com/01c16c28/478fee0854c87ef8f77c64e14c3daff7/v0/fs/3_bhk_apartment-for-sale-somapura-Bangalore-outside_view.jpg',
+                                    'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Sep/28/Photo_h470_w1080/74798193_1_PropertyImage1727507928072_470_1080.jpg',
+                                    'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Sep/28/Photo_h470_w1080/74798193_2_PropertyImage1727507935062_470_1080.jpg',
+                                    'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Sep/28/Photo_h470_w1080/74798193_3_PropertyImage1727507946989_470_1080.jpg',
+                                    'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Sep/28/Photo_h470_w1080/74798193_4_PropertyImage1727507961317_470_1080.jpg',
+                                    'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Sep/28/Photo_h470_w1080/74798193_5_PropertyImage1727507967109_470_1080.jpg',
+                                    'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Sep/28/Photo_h470_w1080/74798193_6_PropertyImage1727507979550_470_1080.jpg',
+                                    'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Sep/28/Photo_h470_w1080/74798193_7_PropertyImage1727507995999_470_1080.jpg',
+                                    'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Sep/28/Photo_h470_w1080/74798193_10_PropertyImage1727508030087_470_1080.jpg',
+                                    'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Sep/28/Photo_h470_w1080/74798193_11_PropertyImage1727508037221_470_1080.jpg',
+                                    'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Sep/28/Photo_h470_w1080/74798193_8_PropertyImage1727508003817_470_1080.jpg',
+                                    'https://img.staticmb.com/mbphoto/property/cropped_images/2024/Sep/28/Photo_h470_w1080/74798193_9_PropertyImage1727508015599_470_1080.jpg',
+                                    'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2023/03/01/Project-Photo-17-Divum-Mumbai-5125693_1200_1600_470_1080.jpg'
+                            ],
+                            description: 'A budget-friendly 3 BHK apartment located in a developing area with essential amenities.',
+                            amenities: ['Garden', 'Children\'s Play Area', 'Security']
+                        },  
+                        {
+                            id: 15,
+                            name: 'DREAM HOUSE',
+                            location: 'Sambhajinagar',
+                            price: 500000,
+                            bhk: 3,
+                            image: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaIIRfnsR8_bQH1BApwEeW7nZKJh7-LAi4JA&s',
+                                'https://img.staticmb.com/mbphoto/property/cropped_images/2022/Aug/05/Photo_h470_w1080/62479803_6_hatsAppImage2022-08-05at3.47.42PM(2)_470_1080.jpeg',
+                                'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2023/03/01/Project-Photo-8-Divum-Mumbai-5125693_1200_1600_470_1080.jpg',
+                                'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2023/03/01/Project-Photo-9-Divum-Mumbai-5125693_1200_1600_470_1080.jpg',
+                                'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2023/03/01/Project-Photo-11-Divum-Mumbai-5125693_1200_1600_470_1080.jpg',
+                                'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2023/03/01/Project-Photo-13-Divum-Mumbai-5125693_1200_1600_470_1080.jpg',
+                                'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2023/03/01/Project-Photo-14-Divum-Mumbai-5125693_1200_1600_470_1080.jpg',
+                                'https://img.staticmb.com/mbimages/project/Photo_h470_w1080/2023/03/01/Project-Photo-15-Divum-Mumbai-5125693_1200_1600_470_1080.jpg',
+                            ],
+                            description: 'A charming 2 BHK house with ample space and a welcoming environment for families.',
+                            amenities: ['Parking', 'Garden', '24/7 Security', 'Balcony']
+                        }
+            ];
+
+            // Function to get the property ID from the URL
+            function getQueryParam(param) {
+                var urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
+            }
+
+            // Fetch the property ID from the URL
+            var propertyId = getQueryParam('id');
+
+            // Find the property details based on the ID
+            $scope.property = detailedProperties.find(function(prop) {
+                return prop.id == propertyId;
+            });
+
+            // Function to get the appropriate icon class for each amenity
+            $scope.getAmenityIcon = function(amenity) {
+                switch (amenity) {
+                    case 'Gym':
+                        return 'fa-dumbbell';
+                    case 'Swimming Pool':
+                        return 'fa-water';
+                    case 'Children\'s Play Area':
+                        return 'fa-child';
+                    case 'Garden':
+                        return 'fa-tree';
+                    case 'Clubhouse':
+                        return 'fa-building';
+                    case 'Parking':
+                        return 'fa-parking';
+                    case '24/7 Security':
+                        return 'fa-shield-alt';
+                    case 'Spa':
+                        return 'fa-spa';
+                    case 'Beach Access':
+                        return 'fa-umbrella-beach';
+                    case 'Roof Top Lounge':
+                        return 'fa-sun';
+                    case 'Fitness Center':
+                        return 'fa-heartbeat';
+                    case '24/7 Water Supply':
+                        return 'fa-tint';
+                    default:
+                        return 'fa-check'; // Default icon
+                }
+            };
+        });
+        app.controller('FormController', function($scope) {
+            // Initialize user object
+            $scope.user = {
+                firstName: '',
+                lastName: '',
+                email: '',
+                age: null,
+                maritalStatus: '',
+                lookingTo: ''
+            };
+
+            // Track if the form is touched
+            $scope.isTouched = false;
+
+            // Form submission function
+            $scope.submitForm = function() {
+                $scope.isTouched = true; // Set touched to true when submitting
+
+                // Check if the form is valid
+                if ($scope.user.firstName && $scope.user.lastName && $scope.user.email && 
+                    $scope.user.age && $scope.user.age >= 18 && $scope.user.maritalStatus && 
+                    $scope.user.lookingTo) {
+                    alert('Form is submitted successfully!');
+                } else {
+                    alert('Please correct the errors in the form.');
+                }
+            };
+        });
+    </script>
+</body>
+</html>
